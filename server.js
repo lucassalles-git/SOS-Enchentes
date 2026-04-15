@@ -13,28 +13,28 @@ app.get("/", (req, res) => {
         
         <h2>Registros para pessoas desaparecidas</h2>
             
-        <p>Lista de pessoas: /registros</p>
+        <p>Lista de pessoas: /desaparecidos</p>
         </body>
 
 
         `);
 });
 
-//Rota para listar os registrados
-app.get("/registros", async (req, res) => {
+//Rota para listar os desaparecidos
+app.get("/desaparecidos", async (req, res) => {
   const db = await bancoDados(); //chamando a função do database
 
-  const todosOsRegistros = await db.all(`SELECT * FROM registros`);
+  const todosOsDesaparecidos = await db.all(`SELECT * FROM desaparecidos`);
 
-  res.json(todosOsRegistros);
+  res.json(todosOsDesaparecidos);
 });
 
 //Rota específica por nome
-app.get("/registros/:nome", async (req, res) => {
+app.get("/desaparecidos/:nome", async (req, res) => {
   const { nome } = req.params;
   const db = await bancoDados();
   const pessoaEspecifica = await db.all(
-    `SELECT * FROM registros WHERE nome = ?`,
+    `SELECT * FROM desaparecidos WHERE nome = ?`,
     [nome],
   );
 
@@ -42,30 +42,32 @@ app.get("/registros/:nome", async (req, res) => {
 });
 
 //novo registro de desaparecido
-app.post("/registros", async (req, res) => {
-  const { nome, idade } = req.body;
+app.post("/desaparecidos", async (req, res) => {
+  const { nome, idade, descricao, ultimo_local } = req.body;
   const db = await bancoDados();
 
-  await db.run(`INSERT INTO registros(nome, idade) VALUES (?, ?)`, [
+  await db.run(`INSERT INTO desaparecidos(nome, idade, descricao, ultimo_local) VALUES (?, ?, ?, ?)`, [
     nome,
     idade,
+    descricao, 
+    ultimo_local
   ]);
 
   res.send(`Cadastro de desaparecido: ${nome}, de ${idade} anos de idade`);
 });
 
 //Rota de atualização
-app.put("/registros/:nome", async (req, res) => {
-  const { nome } = req.params;
-  const { situacao, abrigo, endereco } = req.body;
+app.put("/desaparecidos/:id", async (req, res) => {
+  const { abrigo, endereco } = req.body;
+  const id = req.params.id
   const db = await bancoDados();
 
   await db.run(
     `
     UPDATE registros
-    SET situacao = ?, abrigo = ?, endereco = ?
-    WHERE nome = ?`,
-    [situacao, abrigo, endereco, nome],
+    SET status = ?, abrigo = ?, endereco = ?
+    WHERE id = ?`,
+    ["encontrado", abrigo, endereco, id],
   );
 
   res.send(
@@ -74,14 +76,14 @@ app.put("/registros/:nome", async (req, res) => {
 });
 
 //rota de remoção
-app.delete("/registros/:nome", async (req, res) => {
-  const { nome } = req.params;
+app.delete("/desaparecidos/:id", async (req, res) => {
+  const { id } = req.params;
   const db = await bancoDados();
 
-  await db.run(`DELETE FROM registros WHERE nome = ?`, [nome]);
+  await db.run(`DELETE FROM desaparecidos WHERE id = ?`, [id]);
 
   res.send(
-    `O desaparecido com o nome ${nome} foi encontrado e removido com sucesso`,
+    `O desaparecido com o nome ${id} foi encontrado e removido com sucesso`,
   );
 });
 
