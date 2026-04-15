@@ -9,52 +9,34 @@ const bancoDados = async () => {
   });
 
   await db.exec(`
-    CREATE TABLE IF NOT EXISTS registros(
+    CREATE TABLE IF NOT EXISTS desaparecidos(
     
     -- identificação de desaparecido
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT,
     idade INTEGER,
-    situacao TEXT DEFAULT "desaparecido",
-    abrigo TEXT DEFAULT "nenhum",
-    endereco TEXT DEFAULT "nenhum"
+    descricao TEXT,
+    ultimo_local TEXT,
+    status TEXT DEFAULT "desaparecido",
+    abrigo TEXT,
+    endereco TEXT,
+    data_cadastro TEXT DEFAULT CURRENT_TIMESTAMP
     )
         `);
 
-  console.log("Banco de dados configurado: A tabela registros de desaparecidos está pronta");
+  console.log("Banco de dados configurado: A tabela de desaparecidos está pronta");
 
-  const checagem = await db.get(`SELECT COUNT (*) AS total FROM registros`);
+  const checagem = await db.get(`SELECT COUNT (*) AS total FROM desaparecidos`);
 
   if (checagem.total === 0) {
     await db.exec(`
-        INSERT INTO registros(nome, idade, situacao, abrigo, endereco) VALUES (
-        "Francisco de Souza Lima",
-        60,
-        "Encontrado",
-        "Alojamento Igreja Assembleia de Deus 8BC",
-        "Av. Oitavo Bc, 694 - Fião, São Leopoldo - RS, 93020-530"
-        ),
-        (
-        "Ana Salles Alves",
-        10,
-        "Encontrado",
-        "1º IGREJA DO EVANGELHO QUADRANGULAR",
-        "R. Demétrio Ribeiro, 47 - Centro Histórico, Porto Alegre - RS, 90010-313"
-        ),
-        (
-        "Patricia Vasconcelos Almeida",
-        34,
-        "Encontrado",
-        "Bigornão",
-        "Av. Pres. João Goulart - Morro do Espelho, São Leopoldo - RS, 93020-190"
-        )
-        `);
+        INSERT INTO desaparecidos(nome, idade, descricao, ultimo_local, status, abrigo, endereco) VALUES (?, ?, ?, ?, ?, ?, ?)`);
   } else {
-    console.log(`Banco pronto com ${checagem.total} registros`);
+    console.log(`Banco pronto com ${checagem.total} desaparecidos`);
   }
 
-  const todosOsRegistros = await db.all("SELECT * FROM registros");
-  console.table(todosOsRegistros);
+  const todosOsDesaparecidos = await db.all("SELECT * FROM desaparecidos");
+  console.table(todosOsDesaparecidos);
 
   return db;
 };
