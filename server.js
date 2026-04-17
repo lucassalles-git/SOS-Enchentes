@@ -55,7 +55,7 @@ app.post("/desaparecidos", async (req, res) => {
   const { imagem, nome, idade, descricao, ultima_vezVisto } = req.body;
   const db = await bancoDados();
 
-  await db.run(`INSERT INTO desaparecidos(imagem, nome, idade, descricao, ultima_vezVisto) VALUES (?, ?, ?, ?)`, [
+  await db.run(`INSERT INTO desaparecidos(imagem, nome, idade, descricao, ultima_vezVisto) VALUES (?, ?, ?, ?, ?)`, [
     imagem,
     nome,
     idade,
@@ -74,7 +74,7 @@ app.put("/desaparecidos/:id", async (req, res) => {
 
   await db.run(
     `
-    UPDATE registros
+    UPDATE desaparecidos
     SET status = ?, abrigo = ?, endereco = ?
     WHERE id = ?`,
     ["encontrado", abrigo, endereco, id],
