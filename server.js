@@ -8,14 +8,23 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   res.send(`
-        <body>
-        <h1>SOS Enchentes</h1>
-        
-        <h2>Registros para pessoas desaparecidas</h2>
-            
-        <p>Lista de pessoas: /desaparecidos</p>
-        </body>
+        <html>
+        <head>
+          <style>
+          body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+          h1 { color: #2c3e50; }
+          button { background: #27ae60; border: none; padding: 10px; border-radius: 5px; }
+          button a { color: white; text-decoration: none; font-weight: bold; }
+          </style>
+        </head>
 
+          <body>
+          <h1>Busca Solidária</h1>
+          <h2>Registros para pessoas desaparecidas</h2>
+          <p>Lista de pessoas desaparecidas/encontradas:</p>
+          <button><a href="/desaparecidos">Clique aqui</a></button>
+          </body>
+        </html>
 
         `);
 });
@@ -43,10 +52,11 @@ app.get("/desaparecidos/:id", async (req, res) => {
 
 //novo registro de desaparecido
 app.post("/desaparecidos", async (req, res) => {
-  const { nome, idade, descricao, ultima_vezVisto } = req.body;
+  const { imagem, nome, idade, descricao, ultima_vezVisto } = req.body;
   const db = await bancoDados();
 
-  await db.run(`INSERT INTO desaparecidos(nome, idade, descricao, ultima_vezVisto) VALUES (?, ?, ?, ?)`, [
+  await db.run(`INSERT INTO desaparecidos(imagem, nome, idade, descricao, ultima_vezVisto) VALUES (?, ?, ?, ?)`, [
+    imagem,
     nome,
     idade,
     descricao, 
