@@ -29,13 +29,13 @@ app.get("/desaparecidos", async (req, res) => {
   res.json(todosOsDesaparecidos);
 });
 
-//Rota específica por nome
-app.get("/desaparecidos/:nome", async (req, res) => {
-  const { nome } = req.params;
+//Rota específica por id
+app.get("/desaparecidos/:id", async (req, res) => {
+  const { id } = req.params;
   const db = await bancoDados();
   const pessoaEspecifica = await db.all(
-    `SELECT * FROM desaparecidos WHERE nome = ?`,
-    [nome],
+    `SELECT * FROM desaparecidos WHERE id = ?`,
+    [id],
   );
 
   res.json(pessoaEspecifica);
