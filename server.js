@@ -52,15 +52,17 @@ app.get("/desaparecidos/:id", async (req, res) => {
 
 //novo registro de desaparecido
 app.post("/desaparecidos", async (req, res) => {
-  const { imagem, nome, idade, descricao, ultima_vezVisto } = req.body;
+  const { imagem, nome, idade, descricao, ultima_vezVisto, abrigo, endereco } = req.body;
   const db = await bancoDados();
 
-  await db.run(`INSERT INTO desaparecidos(imagem, nome, idade, descricao, ultima_vezVisto) VALUES (?, ?, ?, ?, ?)`, [
-    imagem,
-    nome,
-    idade,
+  await db.run(`INSERT INTO desaparecidos(imagem, nome, idade, descricao, ultima_vezVisto, abrigo, endereco) VALUES (?, ?, ?, ?, ?, ?, ?)`, [
+    imagem, 
+    nome, 
+    idade, 
     descricao, 
-    ultima_vezVisto
+    ultima_vezVisto, 
+    abrigo, 
+    endereco
   ]);
 
   res.send(`Cadastro de desaparecido: ${nome}, de ${idade} anos de idade`);
@@ -68,7 +70,7 @@ app.post("/desaparecidos", async (req, res) => {
 
 //Rota de atualização
 app.put("/desaparecidos/:id", async (req, res) => {
-  const { status, abrigo, endereco } = req.body;
+  const {status, abrigo, endereco} = req.body;
   const id = req.params.id
   const db = await bancoDados();
 

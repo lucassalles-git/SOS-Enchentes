@@ -16,7 +16,7 @@ const bancoDados = async () => {
     imagem TEXT,
     nome TEXT,
     idade INTEGER,
-    status TEXT DEFAULT "desaparecido",
+    status TEXT DEFAULT "Desaparecido",
     descricao TEXT,
     ultima_vezVisto TEXT,
     abrigo TEXT,
