@@ -68,7 +68,7 @@ app.post("/desaparecidos", async (req, res) => {
 
 //Rota de atualização
 app.put("/desaparecidos/:id", async (req, res) => {
-  const { abrigo, endereco } = req.body;
+  const { status, abrigo, endereco } = req.body;
   const id = req.params.id
   const db = await bancoDados();
 
@@ -77,7 +77,7 @@ app.put("/desaparecidos/:id", async (req, res) => {
     UPDATE desaparecidos
     SET status = ?, abrigo = ?, endereco = ?
     WHERE id = ?`,
-    ["encontrado", abrigo, endereco, id],
+    [status, abrigo, endereco, id],
   );
 
   res.send(
